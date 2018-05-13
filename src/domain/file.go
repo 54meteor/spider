@@ -23,9 +23,10 @@ func (f *File) WriteFile() (int, error) {
 	return io.WriteString(f.F, f.Content)
 }
 
-func (f *File) CreateFile() {
+func (f *File) CreateFile() (*os.File, error) {
 	if f.CheckFileIsExist() {
-		return
+		return os.Open(f.FilePath + f.FileName)
+	} else {
+		return os.Create(f.FilePath + f.FileName)
 	}
-
 }

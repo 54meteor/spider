@@ -2,7 +2,6 @@ package main
 
 import (
 	"domain"
-	"os"
 	"util"
 )
 
@@ -13,12 +12,11 @@ func main() {
 		if err != nil {
 			return
 		}
-
 		f := new(domain.File)
-		f.FileName = "255_65" + ".txt"
-		file, err := os.Create("../" + f.FileName)
-		f.FilePath = "../"
+		f.FilePath = "../../res/"
+		f.FileName = "255_65"
 		f.Content = string(io)
+		file, err := f.CreateFile()
 		f.F = file
 		f.WriteFile()
 	}
