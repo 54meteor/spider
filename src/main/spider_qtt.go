@@ -2,11 +2,11 @@ package main
 
 import (
 	"domain"
-	"fmt"
 	"io/ioutil"
 	"strconv"
 	"util"
-	//	"github.com/tidwall/gjson"
+
+	"github.com/tidwall/gjson"
 )
 
 type Spider_qtt struct {
@@ -20,7 +20,8 @@ func (s *Spider_qtt) getContentList() *Spider_qtt {
 	for _, v := range domain.UrlList {
 		for i := s.Strat; i < s.End; i++ {
 			s.Chs[i] = make(chan int)
-			go s.getList(i, v, s.Chs[i])
+			go s.getUrl(v+"page="+strconv.Itoa(i+1)+"&cid="+s.Id,
+				s.Id+"_"+strconv.Itoa(i), i, s.Chs[i])
 		}
 	}
 	return s
@@ -35,23 +36,22 @@ func (s *Spider_qtt) getChan() {
 	}
 }
 
-func (s *Spider_qtt) getList(step int, v string, ch chan int) {
-	io, err := util.GetContent(v + "page=" + strconv.Itoa(step+1) + "&cid=" + s.Id)
+func (s *Spider_qtt) getUrl(url string, fileName string, key int, ch chan int) {
+	io, err := util.GetContent(url)
 	if err != nil {
 		return
 	}
 	f := new(domain.File)
-	f.FilePath = s.Path
-	f.FileName = s.Id + "_" + strconv.Itoa(step)
+	f.FilePath = s.Path + "content/"
+	f.FileName = fileName
 	f.Content = string(io)
 	file, err := f.CreateFile()
 	f.F = file
 	f.WriteFile()
-	ch <- step
-
+	ch <- key
 }
 
-func (s *Spider_qtt) getContent() {
+func (s *Spider_qtt) getContent() *Spider_qtt {
 	f := new(domain.File)
 	f.FilePath = s.Path
 	fileList := f.GetFileList()
@@ -59,12 +59,13 @@ func (s *Spider_qtt) getContent() {
 		cache := new(domain.File)
 		cache.FilePath = s.Path
 		cache.FileName = file.Name()
-		content, _ := ioutil.ReadFile(f.FilePath + f.FileName)
-		fmt.Println(string(content))
-		//		f.Content = string(content)
-		//		fmt.Println(f.Content)
+		content, _ := ioutil.ReadFile(cache.FilePath + cache.FileName)
+		cache.Content = string(content)
+		value := gjson.Get(cache.Content, "data.data.#.url")
+		for key, url := range value.Array() {
+			s.Chs[key] = make(chan int)
+			go s.getUrl(url.Str, strconv.Itoa(key), key, s.Chs[key])
+		}
 	}
-	//	const json = `{"name":{"first":"Janet","last":"Prichard"},"age":47}`
-	//	value := gjson.Get(json, "age")
-	//	fmt.Println(value.String())
+	return s
 }

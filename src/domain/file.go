@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -25,6 +26,7 @@ func (f *File) WriteFile() (int, error) {
 }
 
 func (f *File) CreateFile() (*os.File, error) {
+	fmt.Println(f.FilePath + f.FileName)
 	if f.CheckFileIsExist() {
 		return os.Open(f.FilePath + f.FileName)
 	} else {

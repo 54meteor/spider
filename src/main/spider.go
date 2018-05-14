@@ -8,6 +8,5 @@ func main() {
 	s.Id = "255"
 	s.Chs = make([]chan int, s.End)
 	//	s.getContentList().getChan()
-	s.getContent()
-
+	s.getContent().getChan()
 }
