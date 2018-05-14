@@ -2,6 +2,7 @@ package domain
 
 import (
 	"io"
+	"io/ioutil"
 	"os"
 )
 
@@ -29,4 +30,9 @@ func (f *File) CreateFile() (*os.File, error) {
 	} else {
 		return os.Create(f.FilePath + f.FileName)
 	}
+}
+
+func (f *File) GetFileList() []os.FileInfo {
+	fileList, _ := ioutil.ReadDir(f.FilePath)
+	return fileList
 }
