@@ -3,6 +3,7 @@ package main
 import (
 	"domain"
 	"io/ioutil"
+	"regexp"
 	"strconv"
 	"util"
 
@@ -44,7 +45,17 @@ func (s *Spider_qtt) getUrl(url string, fileName string, key int, ch chan int) {
 	f := new(domain.File)
 	f.FilePath = s.Path + "content/"
 	f.FileName = fileName
-	f.Content = string(io)
+
+	//	re, _ := regexp.Compile("\\<!doc[\\S\\s]+?\\<section")
+	//	src := re.ReplaceAllString(string(io), "<section")
+	re, _ := regexp.Compile("\\<section[\\S\\s]+?\\</section\\>")
+	src := re.FindString(string(io))
+
+	//	re, _ = regexp.Compile("</section\\>[\\S\\s]+?\\</html\\>")
+	//	src = re.ReplaceAllString(src, "</section>")
+
+	f.Content = src
+
 	file, err := f.CreateFile()
 	f.F = file
 	f.WriteFile()
