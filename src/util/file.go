@@ -24,6 +24,11 @@ func (f *File) WriteFile() (int, error) {
 }
 
 func (f *File) CreateFile() (*os.File, error) {
+	dir := new(Dir)
+	dir.FilePath = f.FilePath
+	if !dir.IsDir() {
+		dir.CreateDir()
+	}
 	if f.CheckFileIsExist() {
 		return os.Open(f.FilePath + f.FileName)
 	} else {

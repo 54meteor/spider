@@ -20,8 +20,8 @@ func main() {
 		s.UrlList = append(s.UrlList, util.CreateUrlList("http://api.1sapp.com/content/outList?tn=1", urls))
 		s.FileName = append(s.FileName, urls["cid"]+"_"+urls["page"])
 	}
-	//	s.getAPI()
-	s.getHTML("\\<section[\\S\\s]+?\\</section\\>", "data.data.#.url", "\\/[\\d\\d]+?\\.html")
+	s.getAPI()
+	//	s.getHTML("\\<section[\\S\\s]+?\\</section\\>", "data.data.#.url", "\\/[\\d\\d]+?\\.html")
 	s.An.GetChan(s.Chs)
 
 }

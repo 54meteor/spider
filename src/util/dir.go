@@ -23,7 +23,7 @@ func (d *Dir) IsDir() bool {
 }
 
 func (d *Dir) CreateDir() bool {
-	err := os.MkdirAll(d.FilePath, 0666)
+	err := os.MkdirAll(d.FilePath, 0777)
 	if err != nil {
 		return false
 	}
