@@ -1,7 +1,8 @@
 package util
 
 type Analysis struct {
-	Path string
+	Path      string
+	ConFilter Filter
 }
 
 func (s *Analysis) GetContent(url string, fileName string, key int, ch chan int) {
@@ -12,9 +13,13 @@ func (s *Analysis) GetContent(url string, fileName string, key int, ch chan int)
 	f := new(File)
 	f.FilePath = s.Path
 	f.FileName = fileName
-	//	re, _ := regexp.Compile("\\<section[\\S\\s]+?\\</section\\>")
-	//	src := re.FindString(string(io))
-	f.Content = string(io)
+
+	if len(s.ConFilter.Grep) != 0 {
+		s.ConFilter.Content = string(io)
+		f.Content = s.ConFilter.Filter()
+	} else {
+		f.Content = string(io)
+	}
 
 	file, err := f.CreateFile()
 	f.F = file

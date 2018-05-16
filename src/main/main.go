@@ -8,7 +8,7 @@ import (
 func main() {
 	s := new(Spider)
 	s.Strat = 0
-	s.End = 70
+	s.End = 10
 	s.Path = "../../res/"
 	s.Id = "255"
 	s.Chs = make([]chan int, s.End)
@@ -20,9 +20,8 @@ func main() {
 		s.UrlList = append(s.UrlList, util.CreateUrlList("http://api.1sapp.com/content/outList?tn=1", urls))
 		s.FileName = append(s.FileName, urls["cid"]+"_"+urls["page"])
 	}
-	s.getAPI()
-	//	s.getHTML()
-	an := new(util.Analysis)
-	an.GetChan(s.Chs)
+	//	s.getAPI()
+	s.getHTML("\\<section[\\S\\s]+?\\</section\\>", "data.data.#.url", "\\/[\\d\\d]+?\\.html")
+	s.An.GetChan(s.Chs)
 
 }
