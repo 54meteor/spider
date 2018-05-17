@@ -33,9 +33,11 @@ func main() {
 	}
 
 	//抓取接口
-	s.getAPI()
+	//	s.getAPI()
 	//抓取html
-	//	s.getHTML("\\<section[\\S\\s]+?\\</section\\>", "data.data.#.url", "\\/[\\d\\d]+?\\.html")
+	//	s.getLocalHTML("\\<section[\\S\\s]+?\\</section\\>", "data.data.#.url", "\\/[\\d\\d]+?\\.html")
+
+	s.getHtml([]string{"http://www.baidu.com"}, "\\<div class=\"s_form\"[\\S\\s]+?\\</div></div>", "baidu.com")
 	s.An.GetChan(s.Chs)
 
 }

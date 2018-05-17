@@ -1,5 +1,9 @@
 package util
 
+import (
+	"fmt"
+)
+
 type Analysis struct {
 	Path      string
 	ConFilter Filter
@@ -28,6 +32,7 @@ func (s *Analysis) GetContent(url string, fileName string, key int, ch chan int)
 	f.F = file
 	//保存抓取的内容
 	f.WriteFile()
+	fmt.Println(fileName)
 	ch <- key
 }
 

@@ -25,7 +25,7 @@ func (s *Spider) getAPI() {
 }
 
 //抓取html类页面
-func (s *Spider) getHTML(filter string, tag string, fileNameFilter string) {
+func (s *Spider) getLocalHTML(filter string, tag string, fileNameFilter string) {
 	//从本地读取文件列表
 	dir := new(util.Dir)
 	dir.FilePath = s.Path
@@ -50,5 +50,18 @@ func (s *Spider) getHTML(filter string, tag string, fileNameFilter string) {
 			filename := nameFilter.Filter()
 			go s.An.GetContent(url.Str, filename, key, s.Chs[key])
 		}
+	}
+}
+func (s *Spider) getHtml(value []string, filter string, fileNameFilter string) {
+	for key, url := range value {
+		s.Chs[key] = make(chan int)
+		s.An.Path = s.Path
+		s.An.ConFilter.Grep = filter
+		//提取存储使用的文件名
+		nameFilter := new(util.Filter)
+		nameFilter.Grep = fileNameFilter
+		nameFilter.Content = url
+		filename := nameFilter.Filter()
+		go s.An.GetContent(url, filename, key, s.Chs[key])
 	}
 }
