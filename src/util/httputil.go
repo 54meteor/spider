@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+//获取目标url的内容
 func GetContent(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
