@@ -12,11 +12,17 @@ type Analysis struct {
 //解析抓取到的内容，并存储到文件
 func (s *Analysis) GetContent(url string, fileName string, key int, ch chan int) {
 	//抓取内容
+	fmt.Println("=============================>")
+	fmt.Println("catch " + url + " content")
 	io, err := GetContent(url)
+	fmt.Println("catch " + url + " content is over")
+	fmt.Println("=============================>")
 	if err != nil {
 		return
 	}
 	//创建存储文件
+	fmt.Println("=============================>")
+	fmt.Println("save start")
 	f := new(File)
 	f.FilePath = s.Path
 	f.FileName = fileName
@@ -32,7 +38,8 @@ func (s *Analysis) GetContent(url string, fileName string, key int, ch chan int)
 	f.F = file
 	//保存抓取的内容
 	f.WriteFile()
-	fmt.Println(fileName)
+	fmt.Println("save end")
+	fmt.Println("=============================>")
 	ch <- key
 }
 

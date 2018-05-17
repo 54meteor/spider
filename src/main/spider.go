@@ -8,8 +8,7 @@ import (
 )
 
 type Spider struct {
-	Strat, End        int
-	Path, Id          string
+	Path              string
 	Chs               []chan int
 	UrlList, FileName []string
 	An                util.Analysis
@@ -39,17 +38,11 @@ func (s *Spider) getLocalHTML(filter string, tag string, fileNameFilter string) 
 		cache.Content = string(content)
 		//使用Json解析库解析json数据
 		value := gjson.Get(cache.Content, tag)
-		for key, url := range value.Array() {
-			s.Chs[key] = make(chan int)
-			s.An.Path = s.Path
-			s.An.ConFilter.Grep = filter
-			//提取存储使用的文件名
-			nameFilter := new(util.Filter)
-			nameFilter.Grep = fileNameFilter
-			nameFilter.Content = url.Str
-			filename := nameFilter.Filter()
-			go s.An.GetContent(url.Str, filename, key, s.Chs[key])
+		urls := make([]string, 0, 10)
+		for _, url := range value.Array() {
+			urls = append(urls, url.Str)
 		}
+		s.getHtml(urls, filter, fileNameFilter)
 	}
 }
 func (s *Spider) getHtml(value []string, filter string, fileNameFilter string) {

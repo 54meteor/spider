@@ -1,0 +1,15 @@
+{"cfg":{"path":"../../res/",
+	"type":"api",
+	"filter":"data.data.#.url",
+	"urls":[
+	"http://api.1sapp.com/content/outList?tn=1&cid=255&page=1",
+	"http://api.1sapp.com/content/outList?tn=1&cid=255&page=2",
+	"http://api.1sapp.com/content/outList?tn=1&cid=255&page=3",
+	"http://api.1sapp.com/content/outList?tn=1&cid=255&page=4",
+	"http://api.1sapp.com/content/outList?tn=1&cid=255&page=5",
+	"http://api.1sapp.com/content/outList?tn=1&cid=255&page=6",
+	"http://api.1sapp.com/content/outList?tn=1&cid=255&page=7",
+	"http://api.1sapp.com/content/outList?tn=1&cid=255&page=8",
+	"http://api.1sapp.com/content/outList?tn=1&cid=255&page=9",
+	"http://api.1sapp.com/content/outList?tn=1&cid=255&page=10"
+	]}}
