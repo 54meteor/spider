@@ -10,13 +10,10 @@ type Config struct {
 	fileName string
 }
 
-func (c *Config) InitConfig(path string, fileName string) map[string]gjson.Result {
-	f := new(File)
-	f.FilePath = path
-	f.FileName = fileName
-	content, _ := ioutil.ReadFile(f.FilePath + f.FileName)
-	f.Content = string(content)
+func (c *Config) InitConfig(path string) map[string]gjson.Result {
+	content, _ := ioutil.ReadFile(path)
+	cnt := string(content)
 	//使用Json解析库解析json数据
-	value := gjson.Get(f.Content, "cfg")
+	value := gjson.Get(cnt, "cfg")
 	return value.Map()
 }

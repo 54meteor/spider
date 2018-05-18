@@ -1,16 +1,19 @@
 package main
 
 import (
+	"flag"
 	"strconv"
 	"util"
 )
 
-//入口程序，目前用于配置抓取的必要信息，后续调整为读取配置文件
+//入口程序，读取配置文件，启动爬虫
 
 func main() {
-
+	var path string
+	flag.StringVar(&path, "path", "./", "path")
+	flag.Parse()
 	config := new(util.Config)
-	cfg := config.InitConfig("./", "config")
+	cfg := config.InitConfig(path)
 	//创建爬虫对象
 	s := new(Spider)
 	//配置存储目录
@@ -36,5 +39,4 @@ func main() {
 
 	//	s.getHtml([]string{"http://www.baidu.com"}, "\\<div class=\"s_form\"[\\S\\s]+?\\</div></div>", "baidu.com")
 	s.An.GetChan(s.Chs)
-
 }
