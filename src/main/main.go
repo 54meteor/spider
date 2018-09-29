@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"strconv"
 	"util"
 )
@@ -10,8 +11,12 @@ import (
 
 func main() {
 	var path string
-	flag.StringVar(&path, "path", "./", "path")
+	flag.StringVar(&path, "path", "", "path")
 	flag.Parse()
+	if len(path) == 0 {
+		fmt.Println("invalid path")
+		return
+	}
 	config := new(util.Config)
 	cfg := config.InitConfig(path)
 	//创建爬虫对象
