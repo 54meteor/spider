@@ -1,7 +1,11 @@
 package main
 
 import (
+	"encoding/xml"
+	"fmt"
 	"io/ioutil"
+	"os"
+	"strings"
 	"util"
 
 	"github.com/tidwall/gjson"
@@ -57,4 +61,68 @@ func (s *Spider) getHtml(value []string, filter string, fileNameFilter string) {
 		filename := nameFilter.Filter()
 		go s.An.GetContent(url, filename, key, s.Chs[key])
 	}
+}
+
+func (s *Spider) getXML() {
+	for key, url := range s.UrlList {
+		s.Chs[key] = make(chan int)
+		s.An.Path = s.Path
+		s.An.ConFilter.Grep = ""
+		//提取存储使用的文件名
+		nameFilter := new(util.Filter)
+		nameFilter.Grep = ""
+		nameFilter.Content = url
+		//		filename := nameFilter.Filter()
+		go s.An.GetContent(url, "xml", key, s.Chs[key])
+	}
+}
+
+func (s *Spider) getXMLContent() {
+	file, err := os.Open(s.Path + "data")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	//	fmt.Println(string(data))
+
+	v := SListBucketResult{}
+	err = xml.Unmarshal(data, &v)
+	if err != nil {
+		fmt.Printf("error: %v", err)
+		return
+	}
+	//	fmt.Println(v)
+	getRs(s, v)
+}
+
+func getRs(s *Spider, v SListBucketResult) {
+	var ch chan int
+	for key, element := range v.Content {
+		s.An.Path = s.Path
+		s.An.ConFilter.Grep = ""
+		fmt.Println("=================================>")
+		fmt.Println("http://archive.bbx.com/" + element.Key)
+		s.An.GetContent("http://archive.bbx.com/"+element.Key, getFileName(element.Key), key, ch)
+	}
+}
+
+func getFileName(url string) string {
+	a := strings.Split(url, "/")
+	filename := a[len(a)-1]
+	return filename
+}
+
+type SListBucketResult struct {
+	XMLName xml.Name   `xml:"ListBucketResult"`
+	Content []SContent `xml:"Contents"`
+}
+
+type SContent struct {
+	Key string `xml:"Key"`
 }

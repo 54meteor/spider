@@ -36,6 +36,10 @@ func main() {
 		s.getLocalHTML("\\<section[\\S\\s]+?\\</section\\>", "data.data.#.url", "\\/[\\d\\d]+?\\.html")
 	case "html":
 		s.getHtml([]string{"http://www.baidu.com"}, "\\<div class=\"s_form\"[\\S\\s]+?\\</div></div>", "baidu.com")
+	case "xml":
+		s.getXML()
+	case "decodexml":
+		s.getXMLContent()
 	}
 	//抓取接口
 	//	s.getAPI()

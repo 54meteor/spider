@@ -23,6 +23,8 @@ func (s *Analysis) GetContent(url string, fileName string, key int, ch chan int)
 	//创建存储文件
 	fmt.Println("=============================>")
 	fmt.Println("save start")
+	fmt.Println(s.Path)
+	fmt.Println(fileName)
 	f := new(File)
 	f.FilePath = s.Path
 	f.FileName = fileName
@@ -35,12 +37,15 @@ func (s *Analysis) GetContent(url string, fileName string, key int, ch chan int)
 	}
 	//创建文件
 	file, err := f.CreateFile()
+	if err != nil {
+		fmt.Println(err)
+	}
 	f.F = file
 	//保存抓取的内容
 	f.WriteFile()
 	fmt.Println("save end")
 	fmt.Println("=============================>")
-	ch <- key
+	//	ch <- key
 }
 
 //遍历通道集合
